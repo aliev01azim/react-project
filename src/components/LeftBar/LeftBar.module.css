@@ -1,0 +1,26 @@
+.LeftBar {
+    width: 20%;
+    padding-top: 30px;
+    height: 100%;
+    background-color: blue;
+    padding-bottom: 300px;
+    float: left;
+}
+
+.LeftBar a {
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    font-size: 18px;
+    display: block;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    transition: .3s;
+}
+
+.LeftBar a:hover {
+    font-weight: bold;
+}
+
+a.active {
+    color: gold;
+}

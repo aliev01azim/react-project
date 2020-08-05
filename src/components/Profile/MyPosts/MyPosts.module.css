@@ -1,0 +1,17 @@
+.Content {
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+.postsBlock {
+    padding-left: 20px;
+}
+
+.Content div {
+    margin-bottom: 50px;
+}

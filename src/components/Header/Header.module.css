@@ -1,0 +1,12 @@
+.Header {
+    height: 100px;
+    width: 100%;
+    background-color: rgb(2, 99, 2);
+}
+
+.Header img {
+    width: 100px;
+    border-radius: 50%;
+    height: 100px;
+    object-fit: cover;
+}
