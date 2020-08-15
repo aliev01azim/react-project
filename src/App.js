@@ -11,7 +11,6 @@ import Settings from "./components/Profile/Settings/Settings.jsx";
 
 import { Route } from "react-router-dom";
 import { BrowserRouter } from "react-router-dom";
-import { addPost, addMessage } from "./redux/state";
 
 const App = (props) => {
     return ( <
@@ -29,7 +28,8 @@ const App = (props) => {
         render = {
             () => ( <
                 Profile PostData = { props.state.ProfilePage.PostData }
-                addPost = { addPost }
+                dispatch = { props.dispatch }
+                newPostText = { props.state.ProfilePage.newPostText }
                 />
             )
         }
@@ -39,7 +39,8 @@ const App = (props) => {
             () => ( <
                 Dialogs DialogsData = { props.state.MessagePage.DialogsData }
                 MessagesData = { props.state.MessagePage.MessagesData }
-                addMessage = { addMessage }
+                newMessageText = { props.state.MessagePage.newMessageText }
+                dispatch = { props.dispatch }
                 />
             )
         }
