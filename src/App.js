@@ -2,15 +2,14 @@ import React from "react";
 import "./App.css";
 import Header from "./components/Header/Header.jsx";
 import LeftBar from "./components/LeftBar/LeftBar.jsx";
-
 import Profile from "./components/Profile/Profile.jsx";
-import Dialogs from "./components/Dialogs/Dialogs.jsx";
 import News from "./components/News/News.jsx";
 import Music from "./components/Music/Music.jsx";
 import Settings from "./components/Profile/Settings/Settings.jsx";
-
 import { Route } from "react-router-dom";
 import { BrowserRouter } from "react-router-dom";
+import DialogsContainer from "./components/Dialogs/DialogsContainer";
+import UsersContainer from "./components/Users/UsersContainer";
 
 const App = (props) => {
     return ( <
@@ -26,24 +25,11 @@ const App = (props) => {
         <
         Route path = "/Profile"
         render = {
-            () => ( <
-                Profile PostData = { props.state.ProfilePage.PostData }
-                dispatch = { props.dispatch }
-                newPostText = { props.state.ProfilePage.newPostText }
-                />
-            )
-        }
-        /> <
+            () => < Profile / > }
+        />{" "} <
         Route path = "/Dialogs"
         render = {
-            () => ( <
-                Dialogs DialogsData = { props.state.MessagePage.DialogsData }
-                MessagesData = { props.state.MessagePage.MessagesData }
-                newMessageText = { props.state.MessagePage.newMessageText }
-                dispatch = { props.dispatch }
-                />
-            )
-        }
+            () => < DialogsContainer / > }
         />{" "} <
         Route path = "/News"
         render = {
@@ -56,6 +42,10 @@ const App = (props) => {
         Route path = "/Settings"
         render = {
             () => < Settings / > }
+        />{" "} <
+        Route path = "/Users"
+        render = {
+            () => < UsersContainer / > }
         />{" "} <
         /div>{" "} <
         /div>{" "} <

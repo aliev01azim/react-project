@@ -5,24 +5,15 @@ import s from './MyPosts.module.css';
 const MyPosts = (props) => {
     let PostElements = props.PostData.map(post => <Post message={post.text} count={post.count} />)
 
-
     let newPostElement=React.createRef();
-    let addPost=()=>{
-        // props.addPost()
-        props.dispatch({type:'ADD-POST'})
+    let AddPost=()=>{
+        props.addPost()
     }
     
     let onPostChange=()=>{
         let text=newPostElement.current.value;
-        // props.updatePostText(text)
-        let action = {
-            type:'UPDATE-POST-TEXT',
-            text:text
+        props.onPostChange(text)
     }
-        props.dispatch(action); 
-    }
-
-
 
     return (
         <div className={s.postsBlock}>
@@ -36,7 +27,7 @@ const MyPosts = (props) => {
                     value={props.newPostText}/>
                 </div>
                 <div>
-                    <button onClick={addPost}>Add post</button>
+                    <button onClick={AddPost}>Add post</button>
                 </div>
             </div>
             <div className={s.posts}>

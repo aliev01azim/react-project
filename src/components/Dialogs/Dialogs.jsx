@@ -3,7 +3,6 @@ import s from './Dialogs.module.css';
 import DialogItem from './DialogItem/DialogItem.jsx';
 import Message from './Message/Message.jsx';
 
-
  
 const Dialogs = (props) => {
     
@@ -13,13 +12,11 @@ const Dialogs = (props) => {
 
     let newMessageElement=React.createRef();
     let AddMessage=()=>{
-        // props.AddMessage()
-        props.dispatch({type:'ADD-MESSAGE'})
+        props.AddMessage()
     }
     let onMessageChange=()=>{
         let text=newMessageElement.current.value;
-        // props.updateMessageText(text)
-        props.dispatch({type:'UPDATE-MESSAGE-TEXT',newText:text})
+        props.onMessageChange(text)
     }
     return (
         <div>
