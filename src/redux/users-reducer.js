@@ -1,42 +1,20 @@
+import { usersApi } from "../Api/Api"
+
 const FALLOW = 'FALLOW'
 const UNFALLOW = 'UNFALLOW'
 const SET_USERS = 'SET_USERS'
+const SET_USERS_TOTAL_COUNT = 'SET_USERS_TOTAL_COUNT'
+const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE'
+const SET_PRELOADER = 'SET_PRELOADER'
+const BTN_TOGGLE_IS_FETCHING = 'BTN_TOGGLE_IS_FETCHING'
 
 let initialState = {
-    UsersData: [
-        // {
-        //     id: 1,
-        //     imgUrl: 'https://lh3.googleusercontent.com/z-VxKf3G9fJxlJblDgr23eOL-CAYzZz2dYGngUQH07z7BChKBExKbbF4QLWNHP7gL4Q',
-        //     followed: true,
-        //     name: 'Dmitriy',
-        //     status: "Hello,my name is Azim?",
-        //     location: { country: 'russian', city: 'moskva' }
-        // },
-        // {
-        //     id: 2,
-        //     imgUrl: 'https://lh3.googleusercontent.com/z-VxKf3G9fJxlJblDgr23eOL-CAYzZz2dYGngUQH07z7BChKBExKbbF4QLWNHP7gL4Q',
-        //     followed: false,
-        //     name: 'Azim',
-        //     status: "WTF!my name is Azim?",
-        //     location: { country: 'kg', city: 'bishkek' }
-        // },
-        // {
-        //     id: 3,
-        //     imgUrl: 'https://lh3.googleusercontent.com/z-VxKf3G9fJxlJblDgr23eOL-CAYzZz2dYGngUQH07z7BChKBExKbbF4QLWNHP7gL4Q',
-        //     followed: false,
-        //     name: 'Aliev',
-        //     status: "my surname is Aliev?",
-        //     location: { country: 'kz', city: 'astana' }
-        // },
-        // {
-        //     id: 4,
-        //     imgUrl: 'https://lh3.googleusercontent.com/z-VxKf3G9fJxlJblDgr23eOL-CAYzZz2dYGngUQH07z7BChKBExKbbF4QLWNHP7gL4Q',
-        //     followed: true,
-        //     name: 'Akyl',
-        //     status: "Hello,my name is Azim?",
-        //     location: { country: 'tadj', city: 'dushanbe' }
-        // }
-    ],
+    UsersData: [],
+    userTotalCount: 0,
+    pageSize: 5,
+    currentPage: 1,
+    isFetching: false,
+    btnToggle: []
 }
 const usersReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -65,18 +43,86 @@ const usersReducer = (state = initialState, action) => {
                     }
                     return u
                 })
-            }
+            };
         case SET_USERS:
             return {
                 ...state,
-                UsersData: [...state.UsersData, ...action.user]
-            }
+                UsersData: action.user
+            };
+        case SET_CURRENT_PAGE:
+            return {
+                ...state,
+                currentPage: action.page
+            };
+        case SET_USERS_TOTAL_COUNT:
+            return {
+                ...state,
+                userTotalCount: action.userCount
+            };
+        case SET_PRELOADER:
+            return {
+                ...state,
+                isFetching: action.p
+            };
+
+        case BTN_TOGGLE_IS_FETCHING:
+            return {
+                ...state,
+                btnToggle: action.fetching ? [...state.btnToggle, action.userId] : state.btnToggle.filter(id => id != action.userId)
+            };
         default:
             return state
     }
 }
 
-export const fallowAC = (userId) => ({ type: FALLOW, userId })
-export const unfallowAC = (userId) => ({ type: UNFALLOW, userId })
-export const setUsersAC = (user) => ({ type: SET_USERS, user })
+export const followSuccess = (userId) => ({ type: FALLOW, userId })
+export const unfollowSuccess = (userId) => ({ type: UNFALLOW, userId })
+export const setUsers = (user) => ({ type: SET_USERS, user })
+export const setCurrentPage = (page) => ({ type: SET_CURRENT_PAGE, page })
+export const setUsersTotalCount = (userCount) => ({ type: SET_USERS_TOTAL_COUNT, userCount })
+export const setPreloader = (p) => ({ type: SET_PRELOADER, p })
+export const setBtnToggleFetching = (fetching, userId) => ({ type: BTN_TOGGLE_IS_FETCHING, fetching, userId })
+
+export const getUsers = (currentPage, pageSize) => {
+    return (dispatch) => {
+        dispatch(setPreloader(true))
+        usersApi.getUsers(currentPage, pageSize).then(data => {
+            dispatch(setPreloader(false))
+            dispatch(setUsers(data.items));
+            dispatch(setUsersTotalCount(data.totalCount));
+        });
+    }
+}
+
+export const unfollow = (userId) => {
+    return (dispatch) => {
+        dispatch(setBtnToggleFetching(true, userId));
+        usersApi.unfollow(userId).then((data) => {
+            dispatch(setBtnToggleFetching(false, userId));
+            if (data.resultCode === 0) {
+                {
+                    dispatch(unfollowSuccess(userId));
+                }
+            }
+        });
+    };
+};
+
+
+export const follow = (userId) => {
+    return (dispatch) => {
+        dispatch(setBtnToggleFetching(true, userId));
+        usersApi.follow(userId).then((data) => {
+            dispatch(setBtnToggleFetching(false, userId));
+            if (data.resultCode === 0) {
+                {
+                    dispatch(followSuccess(userId));
+                }
+            }
+        });
+    };
+};
+
+
+
 export default usersReducer;

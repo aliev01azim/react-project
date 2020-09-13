@@ -10,3 +10,12 @@
     height: 100px;
     object-fit: cover;
 }
+
+.dataBlock {
+    float: right;
+}
+
+.dataBlock a {
+    cursor: pointer;
+    color: white
+}

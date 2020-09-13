@@ -4,10 +4,11 @@ import MyPostsContainer from './MyPosts/MyPostsContainer.jsx';
 import ProfileInfo from './ProfileInfo/ProfileInfo.jsx';
 
 const Profile = (props) => {
-    debugger;
     return (
         <div className = {s.Content}>
-            <ProfileInfo />
+            <ProfileInfo 
+            profil={props.profil}
+            />
             <MyPostsContainer store={props.store}/>
         </div>
     )

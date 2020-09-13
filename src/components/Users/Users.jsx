@@ -1,28 +1,43 @@
 import React from 'react';
-import s from './Users.module.css'
-import * as axios from 'axios';
+import s from './Users.module.css';
 import UserPhoto from '../../assets/img/UserPhoto.png'
+import { NavLink } from 'react-router-dom';
 
-class Users extends React.Component {
-    
-    componentDidMount(){
-        axios.get('https://social-network.samuraijs.com/api/1.0/users').then(response => {
-            this.props.setUsers(response.data.items)
-        });
+let Users = (props) => {
+    let pagesCount = Math.ceil(props.userTotalCount/props.pageSize)
+
+    let pages = [];
+    for (let i = 1; i <= pagesCount; i++) {
+        pages.push(i)
     }
 
-    render() {
-        return <div>
-            {
-                this.props.UsersData.map((u) => <div>
+    return <div>
+        <div>
+            {pages.map(p => {
+                return <span
+                    className={props.currentPage === p && s.selectedPage}
+                    onClick={() => { props.onPageChanged(p) }}>
+                    {p}
+                </span>
+            })}
+        </div>
+        {
+            props.UsersData.map(u =>
+                <div key={u.id}>
                     <span>
                         <div>
-                            <img src={u.photos.small != null ? u.photos.small : UserPhoto} />
+                            <NavLink to={'/profile/' + u.id}>
+                            <img src={u.photos.small != null ? u.photos.small : UserPhoto} className={s.img}/>
+                            </NavLink>
                         </div>
                         <div>
                             {u.followed
-                                ? <button onClick={() => { this.props.unfallow(u.id) }}>Unfallow</button>
-                                : <button onClick={() => { this.props.fallow(u.id) }}>Fallow</button>}
+                                ? <button disabled={props.btnToggle.some(id=>id===u.id)} onClick={() => {
+                                    props.unfollow(u.id)
+                                }}>Unfallow</button>
+                                : <button disabled={props.btnToggle.some(id=>id===u.id)} onClick={() => {
+                                    props.follow(u.id)
+                                }}>Fallow</button>}
                         </div>
                     </span>
                     <span>
@@ -36,9 +51,7 @@ class Users extends React.Component {
                         </div>
                     </span>
                 </div>)
-            }
-        </div>
-    }
+        }
+    </div>
 }
-
 export default Users

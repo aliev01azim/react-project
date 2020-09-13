@@ -1,5 +1,8 @@
-const ADD_POST = 'ADD-POST'
-const UPDATE_POST_TEXT = 'UPDATE-POST-TEXT'
+import { profileApi } from "../Api/Api";
+
+const ADD_POST = "ADD-POST";
+const UPDATE_POST_TEXT = "UPDATE-POST-TEXT";
+const SET_USER = "SET_USER";
 
 let initialState = {
     PostData: [
@@ -10,37 +13,45 @@ let initialState = {
         { id: 5, text: "saf,my name is Azim", count: 12 },
         { id: 6, text: "asdis Azim", count: 0 },
     ],
-    newPostText: ''
-}
-debugger
+    newPostText: "",
+    profil: null,
+};
 const profileReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_POST:
             let text = {
                 id: 6,
                 text: state.newPostText,
-                count: 0
-            }
+                count: 0,
+            };
             return {
                 ...state,
                 PostData: [...state.PostData, text],
-                newPostText: ''
-            }
-
+                newPostText: "",
+            };
         case UPDATE_POST_TEXT:
             return {
                 ...state,
-                newPostText: action.text
-            }
-
+                newPostText: action.text,
+            };
+        case SET_USER:
+            return {
+                ...state,
+                profil: action.profile,
+            };
         default:
-            return state
+            return state;
+    }
+};
+export const Profiling = (userId) => {
+    return (dispatch) => {
+        profileApi.getProfile(userId).then(data => {
+            dispatch(setUser(data));
+        });
     }
 }
 export default profileReducer;
 
-export const addPostActionCreator = () => ({ type: ADD_POST })
-export const updatePostTextActionCreator = (text) => ({
-    type: UPDATE_POST_TEXT,
-    text: text
-})
+export const addPostActionCreator = () => ({ type: ADD_POST });
+export const updatePostTextActionCreator = (text) => ({ type: UPDATE_POST_TEXT, text: text });
+export const setUser = (profile) => ({ type: SET_USER, profile });
